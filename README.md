@@ -5,6 +5,7 @@ this contains:
   2. zsh使用
   3. sublime配置
   4. java note
+
 my plan：
   1.  java netty
   2.  hadoop src code reading note
