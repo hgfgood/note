@@ -373,13 +373,139 @@ server.quit()
 ####定制丰富内容的邮件
 1.使用html编写邮件内容
 ```python
+#! /usr/bin/python
+# coding:utf-8
 
+import smtplib
+from email.mime.text import MIMEText
+
+HOST = "smtp.qq.com"
+SUBJECT = u"官方流量数据报表"
+FROM = "980673553@qq.com"
+TO = "hgfgoodcreate@163.com"
+msg = MIMEText("""
+<table width="800" b cellspacing="0" order="0">
+    <tr>
+        <td bgcolor="gray" style="font-size:14px">
+            *官网数据
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <ol>
+                <li>日访问量：<font color=red>152433</font> 访问次数：23651 页面浏览量：45123 点击数：545122 数据流量：504Mb</li>
+                <li>状态码信息：<br></li>&nbsp;&nbsp;&nbsp;500：105 404：3264 503：214
+                <li>浏览器浏览信息：<br></li>&nbsp;&nbsp;&nbsp;IE:50% firefox:10% chrome:30% other:10%
+                <li>页面信息：<br></li>&nbsp;&nbsp;&nbsp;/index.php 42153<br>&nbsp;&nbsp;&nbsp;/view.php 21451<br>&nbsp;&nbsp;&nbsp;/login.php 5122<br>
+            </ol>
+        </td>
+    </tr>
+</table>
+""", "html", "utf-8"
+)
+
+msg['Subject'] = SUBJECT
+msg['From'] = FROM
+msg['TO'] = TO
+
+try:
+    server = smtplib.SMTP()
+    server.connect(HOST, "25")
+    server.starttls()
+    server.login("980673553@qq.com", "password")
+    server.sendmail(FROM, TO, msg.as_string())
+    server.quit()
+    print("邮件发送成功！")
+except Exception, e:
+    print("失败！原因："+str(e))
 ```
+>**注意点**
+>在使用`email.mime.text.MIMEText`对象的时候，需要将MIMEText对象的内容，**编码**和内容使用的语言交代清楚。
+
+
 
 2.在邮件中添加图片
-```python
++ 定义一个`email.mime.multipart.MIMEMultipart`对象
++ 使用`MIMEMultipart`对象的`attach`函数，将`html`内容嵌入到邮件中，其中使用`contentID`来访问嵌入到邮件中的图片信息
++ 使用`MIMEImage`对象，将图片文件从本地以二进制的形式读入到内存，并用图像文件的二进制序列初始化`MIMEImage`对象，使用`MIMEImage`的`add_header()`方法给`MIMEImage`对象设置`contentID`
++ 使用`MIMEMultipart`对象的`attach`函数，将`MIMEImage`对象嵌入到邮件中
 
+```python
+#! /usr/bin/python
+# coding:utf-8
+
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.image import MIMEImage
+from email.mime.text import MIMEText
+
+__author__ = 'hgf'
+
+HOST = "smtp.qq.com"
+SUBJECT = u"业务性能数据表"
+FROM = "980673553@qq.com"
+TO = "hgfgoodcreate@163.com"
+
+def addimg(src, imgid):
+    fp = open(src, 'rb')
+    msgImg = MIMEImage(fp.read())
+    fp.close()
+    msgImg.add_header('Content-ID', imgid)
+    return msgImg
+
+# 使用related定义内嵌资源
+msg = MIMEMultipart('related')
+
+msgtext = MIMEText("""
+<table width="800" b cellspacing="0" order="0">
+    <tr>
+        <td bgcolor="gray" style="font-size:14px">
+            *官网logo
+        </td>
+    </tr>
+    <tr bgcolor="#EFEBDE" height="100" style="font-size:13px">
+        <td>
+           <img src="cid:p1">
+        </td>
+        <td>
+            <img src="cid:p2">
+        </td>
+    </tr>
+    <tr bgcolor="#EFEBDE" height="100" style="font-size:13px">
+        <td>
+           <img src="cid:p3">
+        </td>
+        <td>
+            <img src="cid:p4">
+        </td>
+    </tr>
+</table>
+""", "html", "utf-8")
+msg.attach(msgtext)
+msg.attach(addimg("/home/hgf/Pictures/program/logo/1.PNG", "p1"))
+msg.attach(addimg("/home/hgf/Pictures/program/logo/2.PNG", "p2"))
+msg.attach(addimg("/home/hgf/Pictures/program/logo/3.PNG", "p3"))
+msg.attach(addimg("/home/hgf/Pictures/program/logo/4.PNG", "p4"))
+
+msg['Subject'] = SUBJECT
+msg['From'] = FROM
+msg['To'] = TO
+
+
+try:
+    server = smtplib.SMTP()
+    server.connect(HOST, 25)
+    server.starttls()
+    server.login(FROM, "password")
+    server.sendmail(FROM, TO, msg.as_string())
+    server.quit()
+    print("发送成功")
+except Exception, e:
+    print("失败！原因："+str(e))
 ```
+
+
+
 3.在邮件中添加附件
 ```python
 
