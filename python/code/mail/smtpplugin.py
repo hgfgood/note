@@ -52,4 +52,4 @@ try:
     server.quit()
     print("发送成功！")
 except Exception, e:
-    print("发送失败："+str(e))
+    print("发送失败："+ str(e))
