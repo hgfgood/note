@@ -304,7 +304,7 @@ print diff.make_file(file1lines,file2lines)
 
 ####filecmp模块常见的方法的说明
 `filecmp`常见的方法有：cmp（单文件对比），cmpfiles（多文件对比），dircmp（目录对比）
-    + `filecmp.cmp(f1,f2[,shallow=True])`:对比文件f1和f2是否相同，相同就返回True，不同为False。shallow为可选的参数，默认为True。shallow为True时表示根据文件的属性值（最后修改时间，作者，状态改变时间等）进行对比判断两文件是否相同;shallow为false时，对比两文件的内容判断是否相同。
+    + `filecmp.cmp(f1,f2[,shallow=True])`:对比文件f1和f2是否相同，相同就返回True，不同为False。shallow为可选的参数，默认为True。shallow为True时表示根据文件的属性值（最后修改时间，作者，状态改变时间等）进行对比判断两文件是否相同;shallow为false时，同时对比os.stat()和对比两文件的内容判断是否相同。
     + filecmp.cmpfiles(dir1,dir2[,shallow=True]).对比dir1和dir2给定的文件清单。该方法返回三个列表：匹配，不匹配，错误（目录中不存在，读写权限不够，或其他原因导致的不能比较的清单）。
     + filecmp.dircmp(a,b[,ignore[,hide]])创建一个目录比较对象，a,b,是参加比较的目录名，ignore是忽略的文件列表，并默认为['RCS','CVS',tags'];hide表示隐藏的文件爱你列表，默认为[os.curdir,os.pardir]。dircmp类可以获得目录比较的详细信息，如只有a含有的文件。dircmp提供3个输出报告的方式：
     	* report():比较当前目录的内容
@@ -327,7 +327,63 @@ print diff.make_file(file1lines,file2lines)
 >+ `copytree(olddir,newdir,True/Flase)` 	 把olddir拷贝一份newdir，如果第3个参数是True，则复制目录时将保持文件夹下的符号连接，如果第3个参数是False，则将在复制的目录下生成物理副本来替代符号连接
 
 
+###使用python发送邮件
 
+####简单测试邮件发送o
+1.`smtplib.SMTP(host,port[,local_hostname[,timeout]])`构造smtp类,每个参数的含义：
++ host:邮件服务器地址
++ port：邮件服务器端口
++ local_hostname:在本地主机的FQDN发送HELO/EHLO（标识身份）指令
++ timeout:超时时间，单位s（秒）
+
+
+```python
+#! /usr/bin/python
+
+# coding:utf-8
+
+import smtplib
+import string
+
+HOST = "smtp.google.com"
+SUBJECT = "TEST EMAIL"
+TO = "980673553@qq.com"
+FROM = "hgfgooda@gmail.com"
+text = "this is the mail body main test!"
+other = "other info"		#BODY中的other如果包含字符，则收到的邮件中没有内容，为什么？这个字段是什么意思？
+BODY = string.join(
+    (
+        "From: %s" % FROM,
+        "TO: %s" % TO,
+        "Subject: %s" % SUBJECT,
+        other,
+        text
+    ), "\r\n"
+)
+server = smtplib.SMTP()
+server.connect(HOST, 25)
+server.starttls()
+server.login("hgfgooda@gmail.com", "password")
+server.sendmail(FROM, TO, BODY)
+server.quit()
+
+```
+
+
+####定制丰富内容的邮件
+1.使用html编写邮件内容
+```python
+
+```
+
+2.在邮件中添加图片
+```python
+
+```
+3.在邮件中添加附件
+```python
+
+```
 
 
 - - -
