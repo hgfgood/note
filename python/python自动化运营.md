@@ -575,9 +575,19 @@ except Exception, e:
 - - -
 
 
-##web服务器性能
-###安装pycurl
-###常见错误解决方法
+###web服务器性能
+####安装pycurl
+1.	安裝curl：`sudo apt-get install curl`
+2.	安裝openssl：`apt-get install openssl`
+3.	安裝pycurl:`sudo pip install pycurl`
+
+>**TIPS:**
+>```python
+>In [2]: pycurl.version
+>Out[2]: 'PycURL/7.19.5.1 libcurl/7.35.0 OpenSSL/1.0.1f zlib/1.2.8 libidn/1.28 librtmp/2.3'
+>```
+
+####安裝问题
 1.  错误`__main__.ConfigurationError: Could not run curl-config: [Errno 2] No such file or directory`
 ```
 Downloading/unpacking pycurl
@@ -612,4 +622,187 @@ __main__.ConfigurationError: Could not run curl-config: [Errno 2] No such file o
 
 在debian系列操作系统中需要安装openssl
 
-```sudo apt-get install libcurl4-openssl-dev```
+```
+sudo apt-get install libcurl4-openssl-dev
+```
+####简单使用curl
+```python
+#! /usr/bin/python
+# coding:utf-8
+
+import pycurl
+
+
+__author__ = 'hgf'
+
+
+c = pycurl.Curl()
+c.setopt(pycurl.URL, "http://www.baidu.com")
+c.setopt(pycurl.CONNECTTIMEOUT, 5)
+c.setopt(pycurl.NOPROGRESS, 0)
+c.setopt(pycurl.FORBID_REUSE, 1)
+f = open("a.txt",'wb')
+c.setopt(pycurl.WRITEHEADER, f)
+c.setopt(pycurl.WRITEDATA, f)
+c.setopt(pycurl.DNS_CACHE_TIMEOUT, 30)
+
+c.perform()
+c.close()
+```
+>** 注意： **
+>使用pycurl必须定义pycurl.URL的值，必须调用perform函数使pycurl生效，并且一般需要定义处理pycurl返回的结果。
+
+
+####使用curl探测web服务质量
+```python
+#! /usr/bin/python
+# coding:utf-8
+
+import pycurl
+import os
+import sys
+
+__author__="hgf"
+
+URL = "http://www.baidu.com"
+c = pycurl.Curl()
+c.setopt(pycurl.URL, URL)
+c.setopt(pycurl.CONNECTTIMEOUT, 5)
+c.setopt(pycurl.TIMEOUT, 5)
+c.setopt(pycurl.NOPROGRESS, 1)
+c.setopt(pycurl.FORBID_REUSE, 1)
+c.setopt(pycurl.DNS_CACHE_TIMEOUT, 30)
+c.setopt(pycurl.MAXREDIRS, 1)
+
+indexfile = open(os.path.dirname(os.path.realpath(__file__))+"/content.txt",'wb')
+
+c.setopt(pycurl.WRITEHEADER, indexfile)
+c.setopt(pycurl.WRITEDATA, indexfile)
+
+try:
+	c.perform()
+except Exception, e:
+	print ("error:"+str(e))
+	indexfile.close()
+	c.close()
+	sys.exit()
+
+NAMELOOKUP_TIME = c.getinfo(c.NAMELOOKUP_TIME)
+CONNECT_TIME = c.getinfo(c.CONNECT_TIME)
+PRETRANSFER_TIME = c.getinfo(c.PRETRANSFER_TIME)
+STARTTRANSFER_TIME = c.getinfo(c.STARTTRANSFER_TIME)
+TOTAL_TIME = c.getinfo(c.TOTAL_TIME)
+HTTP_CODE = c.getinfo(c.HTTP_CODE)
+SIZE_DOWNLOAD = c.getinfo(c.SIZE_DOWNLOAD)
+HEADER_SIZE = c.getinfo(c.HEADER_SIZE)
+SPEED_DOWNLOAD = c.getinfo(c.SPEED_DOWNLOAD)
+
+print "HTTP状态码：%s" % HTTP_CODE
+print "DNS解析时间：%.2f ms" % (NAMELOOKUP_TIME*1000)
+print "建立连接时间：%.2f ms" % (CONNECT_TIME*1000)
+print "准备传输时间： %.2f ms" % (PRETRANSFER_TIME*1000)
+print "传输开始时间：%.2f ms" % (STARTTRANSFER_TIME*1000)
+print "传输结束时间： %.2f ms" % ((TOTAL_TIME - STARTTRANSFER_TIME)*1000)
+print "下载数据包大小： %.2f bytes/s" % SIZE_DOWNLOAD
+print "HTTP 头部大小： %.2f byte" % HEADER_SIZE
+print "下载速度：%.2f bytes/s" % SPEED_DOWNLOAD
+indexfile.close()
+c.close()
+
+```
+
+
+##定制报表
+
+###python处理excel
+####安装slsxwriter
+
+`pip install XlsxWriter`
+
+####XlsxWriter常见方法的使用
+
+1.	Workbook类
+	+ `Worlbook`对象代表了电子表格的整个文件，并且存储在磁盘上，
+	+ 构造方法：`Workbook(filename[, option])`
+	+ 主要的方法：
+		- `add_Worksheet([sheetname])`:添加一个新的工作表，不定义`sheetname`时，默认为`sheet[工作表序号]`。
+		- `add_format([proprties])`:创建一个新的格式对象来格式化单元格，参数`proprties`为dict类型， 指定一个单元格属性的字典。
+			* 例如：`workbook.add_format({'bold':True})`,设置加粗的单元格。
+			* 上述设置等价方式：`bold = workbook.add_format()`和`bold.set_bold()`
+		- `add_chart(options)`:在工作表中创建一个图表对象，内部通过`insert_chart()`实现。option为dict类型。
+		- `close()`:关闭工作表文件。
+
+2.	WorkSheet类
+	+ `write(row, col, *args)`:将普通数据写道单元格中，其中`(row, col)`为单元格在表格中的位置，起始位置为`(0,0)`;`×args`为要写入的数据内容， 可以为数字，字符串，格式对象。
+	+ `set_row(row, height, cell_format, option)`:设置行单元格的属性，`row`指定行位置;`height`设置行高，单位为像素;`cell_format`为`format`类型，指定格式对象;参数`option`是dict类型，设置行`hiden`(隐藏),`level`(组合分级)，`collapsed`（折叠）。
+	+ `set_column(first_col, last_col, wodth, cell_format, option)`:设置一列或多列单元格属性。参数`wodth`（float类型）设置列宽，`cell_format`和`options`同上。
+	+ `insert_image(row, col, image[, option])`:插入图片到指定单元格，支持`PNG`,`JPEG`,`BMP`等图片格式。`image`（String类型）表示图片的路径。`options`（dist类型）：制定图片的位置、比例、链接URL等。
+		- 例如：worksheet.insert_image('B5', 'img/python-logo.jpg', {'url':'http://python.org'})`
+3.	Chart类
+	+ 支持的图表类型包括面积，条形图，柱形图，饼状图，散点图，股票，雷达。
+	+ 图表通过`worksheet`的`add_chart`方法创建图表。`chart = worksheet.add_chart({type,'column'})`创建一个柱形图。
+>图表类型说明：
+|类型关键字|图表类型|
+|--------|-------|
+|area|面积样式图表|
+|bar|条形态|
+|column|柱形图|
+|line|条形图|
+|pie|饼状图|
+|scatter|散点图|
+|stock|股票图|
+|radar|雷达图|
+
+	+ 通过`insert_chart()`方法将图标插入到指定的地方。
+	+ 主要的方法：
+		- `chat.add_series(options)`:添加一个数据系列到图表。
+			* 例子：
+			```python
+			chat.add_series({
+     		   	'categories':	'=Sheet1!$a$1:$A$5',
+     	       'value':		'=Sheet1!$B$1:$B$5'
+     	       'line':			{'color':'red'},
+    	    })
+```
+>说明：
+>`add_series`最长见的option是
+>`categories`：表示标签的范围;
+>`value`:图表的数据范围
+>`line`：图标的线条属性，包括颜色，宽度等。
+		- `set_x_axis(options)`:设置X轴选项，
+			* 例子
+			```python
+            char.set_x_axis({
+            	'name':	'Earning_per_!Quater',#设置X轴标题名字
+                'name_font':	{'size':14, 'bold':True},#设置X轴标题字体
+                'num_foont':	{'italic':True},#设置X轴数字字体
+            })
+```
+		- `set_size(options)`:设置图表大小。例如`chart.set_size({'width':720, 'height':576})`
+		- `set_title`:设置图表的标题。`chart.set_title({'name':'Year End Result'})`
+		- `set_styke(style_id))':`style_id`为不同数字代表不同的样式。
+		- `set_table(options)`:设置X轴为数字表格样式
+####实例：定制自动化业务流量报表
+
+
+###python与rrdtool结合
+
+#### 安装rrdtool
+`pip install python-rrdtool`
+>可能的错误：
+>1.	I found a copy of pkgconfig, but there is no libxml-2.0.pc file around.
+>You may want to set the PKG_CONFIG_PATH variable to point to its
+>location.
+>原因：没有安装libxml
+>解决方案：`sudo apt-get install libxml2` `sudo apt-get install libxml2-dev`
+>2.	出现`cannot find -lrrd`
+>原因：库文件没有导入到ld检索目录中，或者是库文件是在so后面加上了序号，导致找不到库文件
+>解决方案：只需要使用ln命令，将带号码的so文件软链接到不带序号的库文件，如`sudo ln -sv librrd.so.4 librrd.so`
+
+
+
+
+
+
+
+
