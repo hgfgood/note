@@ -760,15 +760,16 @@ c.close()
 			```python
 			chat.add_series({
      		   	'categories':	'=Sheet1!$a$1:$A$5',
-     	       'value':		'=Sheet1!$B$1:$B$5'
+     	       'values':		'=Sheet1!$B$1:$B$5'，
      	       'line':			{'color':'red'},
     	    })
 ```
 >说明：
 >`add_series`最长见的option是
->`categories`：表示标签的范围;
->`value`:图表的数据范围
+>`categories`：表示图表标签的范围[将表格中的对应位置的内容作为图表的横轴];
+>`value`:图表的数据范围[表格中的范围内的数据作为画图的数据]
 >`line`：图标的线条属性，包括颜色，宽度等。
+>`name`:图例项，[一个图的多种内容的区分]
 		- `set_x_axis(options)`:设置X轴选项，
 			* 例子
 			```python
@@ -782,6 +783,7 @@ c.close()
 		- `set_title`:设置图表的标题。`chart.set_title({'name':'Year End Result'})`
 		- `set_styke(style_id))':`style_id`为不同数字代表不同的样式。
 		- `set_table(options)`:设置X轴为数字表格样式
+
 ####实例：定制自动化业务流量报表
 
 
