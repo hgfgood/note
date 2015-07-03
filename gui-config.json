@@ -1,0 +1,18 @@
+{
+"configs" : [
+  {
+"server" : "2604:a880:1:20::28b:e001",
+"server_port" : 8387,
+"password" : "admin",
+"method" : "aes-256-cfb",
+"remarks" : ""}
+
+],
+"index" : 0,
+"global" : true,
+"enabled" : true,
+"shareOverLan" : false,
+"isDefault" : false,
+"localPort" : 1080,
+"pacUrl" : null,
+"useOnlinePac" : false}
