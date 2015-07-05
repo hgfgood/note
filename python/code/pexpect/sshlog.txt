@@ -1,0 +1,17 @@
+
+
+
+
+
+Last login: Sun Jul  5 11:09:13 2015 from 192.168.122.1
+who am i
+
+
+
+[root@hgfgood ~]# who am i
+root     pts/1        2015-07-05 11:10 (192.168.122.1)
+[root@hgfgood ~]# 
+[root@hgfgood ~]# 
+[root@hgfgood ~]# 
+[root@hgfgood ~]# 
+[root@hgfgood ~]# 

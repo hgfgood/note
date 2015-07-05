@@ -1,11 +1,26 @@
-#常用软件
-##主要参考：
+#centos7系统安装
+
+##安装系统修复引导项
+
+###安装系统
+
+参考百度经验，[安装centos和windows8.1双系统](http://jingyan.baidu.com/article/1709ad80b28cf74634c4f0d5.html)
+
+###秀姑引导windows8
+
+主要参考：[csdn博客](http://blog.csdn.net/johnnyhu90/article/details/41410547)
+
+##常用软件
+
+####主要参考：
+
 [https://copr.fedoraproject.org/coprs/mosquito/myrepo/](https://copr.fedoraproject.org/coprs/mosquito/myrepo/)
 
 >**主要软件包括：QQ，搜狗输入法，百度王盘，deepin截图工具，歌词显示工具，deepinmusic，xwinddesktop（类似迅雷），为知笔记，有到笔记
 豆瓣音乐，grub4doc等实用软件。**
 
-##安装shadowsocks-qt
+####安装shadowsocks-qt
+
 直接使用[fedora的安装源](https://copr.fedoraproject.org/coprs/librehat/shadowsocks/)：
 1.  新建文件`/etc/yum.repos.d/libredhat-shadowsocks-fedora.repo`
 2.  将下面的源输入到1中的文件```

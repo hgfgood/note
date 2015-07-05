@@ -12,6 +12,7 @@ class Host:
         self.ip=''
         self.user=''
         self.userpass=''
+
     def __init__(self,ip,user,password):
         self.ip=ip
         self.user=user
@@ -29,6 +30,7 @@ class AutoPassword:
             self.uncheckedfrom=copy.deepcopy(self.slaves)# uncheckto记录所有没有检查主机：从slaves ssh 到server
         fout = file('log.txt','w')
         self.child.logfile=fout
+
     # 文件初始化server和slave,文件的格式IP:username:password。其中username和password中不能出现:号，默认第一行是server，其余为slaves;all同上
     def __init__(self,filenamepath,all):
         self.all = all
@@ -52,13 +54,16 @@ class AutoPassword:
 
     def check_hosts_files(self):
         pass
+
     # 传送文件
     def scp_files(self, filenamepath, hostfrom, hostto):
         pass
+
     # 产生密钥文件
     def generate_rsa(self):
         pass
-    def sshremote(self,hostto):
+
+    def ssh_remote(self,hostto):
         index=self.child.expect(['#',pexpect.EOF])
         if index!=0 and index!=1:
             print "error encountered before ssh to "+ hostto.ip
@@ -66,17 +71,27 @@ class AutoPassword:
         self.child.sendline( str( 'ssh %s@%s' % (hostto.user, hostto.ip) ) )
         index = self.child.expect(['(?i)are you', '(?i)password', '(?i)continue connecting (yes/no)?','(?i)Last login', pexpect.EOF, pexpect.TIMEOUT])
         if index==0:# 以前从未登录过这个IP
-            pass
+            self.child.sendline('yes')
+            self.child.expect('(?i)password')
+            self.child.sendline(hostto.userpass)
+            self.child.expect('#')
         elif index==1:
-            pass
+            self.child.sendline(hostto.userpass)
+            self.child.expect('#')
         elif index==2 or index==3:# 已经可以免密码登录，则可以清除相关的检查数据unchecked*
-            pass
+            self.uncheckedto.remove(hostto)
+            print "already ssh without password, remove from unchcecked list"
+            self.child.sendcontrol('c')#发送ctrl+c断开连接
+            self.child.expect('#')
         elif index==4:# 缓冲区没有数据了
-            pass
+            print 'EOF, check log file please.'
         elif index==5:# 连接超时
             self.child.read()
             self.child.close()
+            print 'connection timeout, check log file please.'
             sys.exit(-1)
 
 if __name__=='__main__':
-    pass
+    # test ssh_remote
+    server=Host('')
+    slavea=Host('192.168.122.8','root','hgfgood')
