@@ -266,7 +266,7 @@ if __name__ =="__main__":
 #coding:utf-8
 
 import difflib
-import sys 
+import sys
 
 try:
         firstfile = sys.argv[1]#python 的参数是从一开始的
@@ -295,7 +295,7 @@ file1lines = readfile(firstfile)
 file2lines = readfile(secondfile)
 
 diff = difflib.HtmlDiff()
-print diff.make_file(file1lines,file2lines)    
+print diff.make_file(file1lines,file2lines)
 
 ```
 
@@ -805,6 +805,37 @@ c.close()
 
 
 
+##pexpect
+纯python编写的系统批量运维管理器。
 
+###安装
+`sudo pip install pexpect`
 
+###pexpect使用
+pexpect主要有两大功能：
 
+####run方法
+`run`方法主要替代原来的'os.system()'
+
+####spawn 类
+`spawn`主要实现了自动交互的功能。
+> **注意：**
+>`spawn`；类不会解析shell命令中的元字符，包括重定向`>`，管道`|`，或者是通配符`*`，但是我们可以使用给`/bin/bash`传递参数的形式使用元字符。
+>例如：`pexpect.spawn('/bin/bash -c "ls -al | grep LOG > logs.txt"')`
+
+* pexpect日志输出到文件：```
+child = pexpect.spawn('some_command')
+fout = file('mylog.txt','w')
+child.logfile(fout)
+````
+
+* pexpect日志输出到标准输出流：```
+child = pexpect.spawn('some_command')
+child.logfile = sys.stout
+````
+
+####使用pexpect的注意事项
+1.  注意使用`scp`时，传送文件的权限，当使用pexpect的命令中，包含用scp传送权限比较高，或者传送文件的所有者不是运行pexpect程序的人的时候，需要考虑处理文件权限的问题。特别是传送系统配置文件时，就算root运行程序也不能传送文件成功。
+2. 一般的使用步骤：
+  + 保证目录下有那个文件
+  * 保证执行py的用户有那个传送文件的权限
