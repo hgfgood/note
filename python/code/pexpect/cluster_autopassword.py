@@ -86,7 +86,13 @@ class AutoPassword:
             self.chmod(home+'.ssh/authorized_keys', '600')
             self.child.close()
         if all:# 如果全部互相免密钥连接
-            pass# 将authorized_keys复制到server的.ssh目录下
+            self.child = pexpect.spawn('ls')# 将authorized_keys复制到server的.ssh目录下
+            self.child.logfile = self.fout
+            index = self.child.expect(['autho',pexpect.EOF])
+            print index
+            self.mv_file(server_home+'authorized_keys', server_home+'.ssh/authorized_keys', server)
+            self.chmod(server_home+'.ssh/authorized_keys', '600')
+            self.chmod(server_home+'.ssh', '700')
 
     def mv_file(self, frompath, topath, host, needroot=False):
         '''
@@ -140,7 +146,10 @@ class AutoPassword:
         :return:
         '''
         self.child.sendline('chmod '+ mod +' '+ filepath)
-        self.child.expect('#')
+        index = self.child.expect(['#',pexpect.EOF])
+        if index ==1:
+            print '缓冲区无数据'
+
 
     def scp2local_file(self, filefrompath, filetopath, hostfrom):
         '''
