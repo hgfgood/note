@@ -104,7 +104,7 @@ if __name__ == '__main__':
 	child.expect('#')
 	# 复制ssh配置文件到/etc/ssh目录下
 	child.sendline('sudo mv ~/sshd_config /etc/ssh/sshd_config')
-	index = child.expect(['password:',pexpect.EOF])
+	index = child.expect(['password:', pexpect.EOF])
 	if index == 0:
 		child.sendline(remote_password)
 	elif index == 1:

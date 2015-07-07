@@ -23,7 +23,7 @@
 	+ 配置sublime默认打开python文件：`aliaa -s py=st`
 	+ 配置sublime默认打开markdown文件：`aliaa -s md=st`
 
->上面所有的配置做好以后，需要执行`source ~/.zshrc`，是的配置的效果显示出来
+>**上面所有的配置做好以后，需要执行`source ~/.zshrc`，是的配置的效果显示出来**
 
 ###主题
 1.	在[wiki可以查看主题的截图](https://github.com/robbyrussell/oh-my-zsh/wiki/Themes)，找到自己喜欢的主题
@@ -64,3 +64,23 @@
 
 ###卸载oh my zsh
 直接在终端中，运行`uninstall_oh_my_zsh`,既可以卸载。
+
+
+##oh my zsh高级模式---oh-my-fish
+
+###安装
+	`curl -L https://github.com/oh-my-fish/oh-my-fish/raw/master/tools/install.fish | fish`
+
+###主题设置
+在fish的模式下，输入`theme --help`
+
+###设置oh-my-fish
+oh-my-fish的配置文件为`/home/username/.config/fish/config.fish`,
+>注意：在添加完主题和茶间后，运行`omf install`来自东下在安装相应的插件和主题。
+
+##power_line
+
+###[安装](https://powerline.readthedocs.org/en/latest/installation/linux.html#font-installation)
+1.	`pip install --user powerline-status`或者下载最新的power——line版本的字体。
+2.	将想要的字体移动到``～/.fonts`目录，例如：`mv PowerlineSymbols.otf ~/.fonts/`
+3.	更新字体缓存,`fc-cache -vf ~/.fonts/`
