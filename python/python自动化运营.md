@@ -589,34 +589,34 @@ except Exception, e:
 
 ####安裝问题
 1.  错误`__main__.ConfigurationError: Could not run curl-config: [Errno 2] No such file or directory`
-```
-Downloading/unpacking pycurl
-  Running setup.py egg_info for package pycurl
-    Traceback (most recent call last):
-      File "<string>", line 16, in <module>
-      File "/tmp/pip-build-root/pycurl/setup.py", line 563, in <module>
-        ext = get_extension()
-      File "/tmp/pip-build-root/pycurl/setup.py", line 368, in get_extension
-        ext_config = ExtensionConfiguration()
-      File "/tmp/pip-build-root/pycurl/setup.py", line 65, in __init__
-        self.configure()
-      File "/tmp/pip-build-root/pycurl/setup.py", line 100, in configure_unix
-        raise ConfigurationError(msg)
-    __main__.ConfigurationError: Could not run curl-config: [Errno 2] No such file or directory
-    Complete output from command python setup.py egg_info:
-    Traceback (most recent call last):
+  ```
+  Downloading/unpacking pycurl
+    Running setup.py egg_info for package pycurl
+      Traceback (most recent call last):
+        File "<string>", line 16, in <module>
+        File "/tmp/pip-build-root/pycurl/setup.py", line 563, in <module>
+          ext = get_extension()
+        File "/tmp/pip-build-root/pycurl/setup.py", line 368, in get_extension
+          ext_config = ExtensionConfiguration()
+        File "/tmp/pip-build-root/pycurl/setup.py", line 65, in __init__
+          self.configure()
+        File "/tmp/pip-build-root/pycurl/setup.py", line 100, in configure_unix
+          raise ConfigurationError(msg)
+      __main__.ConfigurationError: Could not run curl-config: [Errno 2] No such file or directory
+      Complete output from command python setup.py egg_info:
+      Traceback (most recent call last):
 
-  File "<string>", line 16, in <module>
-  File "/tmp/pip-build-root/pycurl/setup.py", line 563, in <module>
-    ext = get_extension()
-  File "/tmp/pip-build-root/pycurl/setup.py", line 368, in get_extension
-    ext_config = ExtensionConfiguration()
-  File "/tmp/pip-build-root/pycurl/setup.py", line 65, in __init__
-    self.configure()
-  File "/tmp/pip-build-root/pycurl/setup.py", line 100, in configure_unix
-    raise ConfigurationError(msg)
-__main__.ConfigurationError: Could not run curl-config: [Errno 2] No such file or directory
-```
+    File "<string>", line 16, in <module>
+    File "/tmp/pip-build-root/pycurl/setup.py", line 563, in <module>
+      ext = get_extension()
+    File "/tmp/pip-build-root/pycurl/setup.py", line 368, in get_extension
+      ext_config = ExtensionConfiguration()
+    File "/tmp/pip-build-root/pycurl/setup.py", line 65, in __init__
+      self.configure()
+    File "/tmp/pip-build-root/pycurl/setup.py", line 100, in configure_unix
+      raise ConfigurationError(msg)
+  __main__.ConfigurationError: Could not run curl-config: [Errno 2] No such file or directory
+  ```
 
 **解决方案**：
 
@@ -800,42 +800,3 @@ c.close()
 >2.	出现`cannot find -lrrd`
 >原因：库文件没有导入到ld检索目录中，或者是库文件是在so后面加上了序号，导致找不到库文件
 >解决方案：只需要使用ln命令，将带号码的so文件软链接到不带序号的库文件，如`sudo ln -sv librrd.so.4 librrd.so`
-
-
-
-
-
-##pexpect
-纯python编写的系统批量运维管理器。
-
-###安装
-`sudo pip install pexpect`
-
-###pexpect使用
-pexpect主要有两大功能：
-
-####run方法
-`run`方法主要替代原来的'os.system()'
-
-####spawn 类
-`spawn`主要实现了自动交互的功能。
-> **注意：**
->`spawn`；类不会解析shell命令中的元字符，包括重定向`>`，管道`|`，或者是通配符`*`，但是我们可以使用给`/bin/bash`传递参数的形式使用元字符。
->例如：`pexpect.spawn('/bin/bash -c "ls -al | grep LOG > logs.txt"')`
-
-* pexpect日志输出到文件：```
-child = pexpect.spawn('some_command')
-fout = file('mylog.txt','w')
-child.logfile(fout)
-````
-
-* pexpect日志输出到标准输出流：```
-child = pexpect.spawn('some_command')
-child.logfile = sys.stout
-````
-
-####使用pexpect的注意事项
-1.  注意使用`scp`时，传送文件的权限，当使用pexpect的命令中，包含用scp传送权限比较高，或者传送文件的所有者不是运行pexpect程序的人的时候，需要考虑处理文件权限的问题。特别是传送系统配置文件时，就算root运行程序也不能传送文件成功。
-2. 一般的使用步骤：
-  + 保证目录下有那个文件
-  * 保证执行py的用户有那个传送文件的权限
