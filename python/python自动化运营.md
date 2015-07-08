@@ -800,3 +800,115 @@ c.close()
 >2.	出现`cannot find -lrrd`
 >原因：库文件没有导入到ld检索目录中，或者是库文件是在so后面加上了序号，导致找不到库文件
 >解决方案：只需要使用ln命令，将带号码的so文件软链接到不带序号的库文件，如`sudo ln -sv librrd.so.4 librrd.so`
+
+##python与系统安全
+###病毒扫描
+
+###nmap端口扫描
+在使用python-nmap前，需要在操作系统上安装namp：`yum install namp`
+1. 模块说明
+  + PortScanner类【nmap端口扫描的封装】
+    * `scan(self, host='127.0.0.1', ports=None, arguments='-sV')`：制定扫描的主机端口，nmap命令行扫描的参数。其中`host`的参数形式可以是域名（'scanne.nmap.org'），网段（'192.168.0-255.1-127'或'192.168.128.20/20'），IP地址；ports表示扫描的端口，可以用`22,53,110,143-4564`来表示；arguments为字符串类型，是nmap命令行下的扫描参数。
+    * `comman_line(self)`：返回扫描方法对应的命令行下面的nmap命令。
+    * `scaninfo(self)`：扫描的信息，字典类型
+    * `all_hosts(self)`：返回nmap扫描的主机清单，格式为list
+    * `hostname(self)`：返回扫描对西那个的名字
+    * `state(self)`：返回扫描对象的状态(主要包括up，down，unknow，skipped)
+    * `all_protocals(self)`：返回扫描协议
+    * `all_tcp(self)`：返回TCP协议端口
+    * `tcp(self,port)`：返回TCP协议port端口的信息
+  + PortScannerHostDict类【存储与访问主机的扫描结果】
+2. 示例
+  ```python
+
+  #! /usr/bin/python
+  # -*- coding:utf-8 -*-
+
+  import nmap
+  import sys
+
+  __author__ = 'hgf'
+
+  def detailinfo(hosts, ports):
+      '''
+      使用nmap测试hosts中的所有的ports，并输出详细的信息
+      :param hosts: 所有主机
+      :param ports:所有端口号
+      :return:
+      '''
+      try:
+          nm.scan(hosts = hosts, arguments='-v -sS -p'+ports)
+      except Exception,e:
+          print("Scan error:"+ str(e))
+
+      for host in nm.all_hosts():
+          print('-------------------------------------------------------------------------------------------------------')
+          print('Host: %s (%s)'% (host, nm[hosts].hostname()))
+          print('State: %s' % nm[host].state())
+          for proto in nm[host].all_protocols():
+              print('------------------------------------------------')
+              print('Protocal: %s'% proto)
+
+              iport = nm[host][proto].keys()
+              iport.sort()
+              for port in iport:
+                  print('Port: %s \tstate: %s' %(port, nm[host][proto][port]['state']))
+
+  def printcsv(nm):
+      '''
+      将nmap的结果以excel表的格式输出
+      :param nm: namp实例
+      :return:
+      '''
+      print('-----------------------------------------------------------------------------------------------------------')
+      print('print result as csv')
+      print(nm.csv())
+
+  def pingsweep(hosts,ports):
+      '''
+      根据ports端口，查询网段内存活主机
+      :param hosts:网段
+      :param ports:端口
+      :return:
+      '''
+      nm.scan(hosts=hosts, arguments='-n -sP -PE -PA'+ports)
+      host_list=[(x,nm[x]['status']['state']) for x in nm.all_hosts()]
+      for host, state in host_list:
+          print('{0}:{1}'.format(host,state))
+
+  def call_back(host, scan_result):
+      print("----------------------------------")
+      print host, scan_result
+  def arsynNmap(hosts):
+      '''
+      异步Nmap
+      :param hosts:
+      :return:
+      '''
+      nma = nmap.PortScannerAsync()
+      nma.scan(hosts=hosts, arguments='-sP', callback=call_back)
+      while nma.still_scanning():
+          print('wait')
+          nma.wait(2)
+          # do some other things
+
+  scan_row=[]
+  input_data = raw_input("Please input hosts and ports:")
+  scan_row = input_data.split(' ')
+  if len(scan_row)!=2:
+      print("input error, example input \"192.168.1.0/24 80,433-560\"")
+      sys.exit(0)
+  hosts = scan_row[0]
+  ports = scan_row[1]
+
+  try:
+      nm = nmap.PortScanner()
+  except nmap.PortScannerError:
+      print("Nmap not found ", sys.exc_info()[0])
+      sys.exit(0)
+  except:
+      print("Unexcepted error!")
+      sys.exit(0)
+
+  arsynNmap(hosts)
+  ```
