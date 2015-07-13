@@ -14,7 +14,9 @@ class Host:
         self.userpass=password
 
 class AutoPassword:
-    # 一个一个输入，实现初始化,server 为Host的一个对象，slaves时Host对象列表,all表示是否只能服务器免密钥访问slaves
+    '''
+     一个一个输入，实现初始化,server 为Host的一个对象，slaves时Host对象列表,all表示是否只能服务器免密钥访问slaves
+    '''
     def __init__(self, server, slaves, all):
         self.sever=server
         self.slaves=slaves
@@ -22,8 +24,13 @@ class AutoPassword:
         self.fout = file('log.txt','w')
         fout = file('log.txt','w')
 
-    # 文件初始化server和slave,文件的格式IP:username:password。其中username和password中不能出现:号，默认第一行是server，其余为slaves;all同上
     def readhostsfromfile(self, filenamepath, all):
+        '''
+        文件初始化server和slave,文件的格式IP:username:password。其中username和password中不能出现:号，默认第一行是server，其余为slaves;all同上
+        :param filenamepath:从文件读取服务器信息
+        :param all:
+        :return:
+        '''
         self.all = all
         self.slaves=[]
         self.fout = file('log.txt','w')

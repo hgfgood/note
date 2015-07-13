@@ -2,6 +2,17 @@
 
 ##实际技巧
 1.  python不支持函数重载。。。
+2.  python类中，类的函数的第一个参数self不是必须的，只是人们习惯了，给一个别的名字也是OK
+的，例如：
+```python
+class MyTest:
+  myname = 'peter'
+  def sayhello(hello):
+    print "say hello to %s" % hello.myname
+if __name__ == "__main__":
+MyTest().sayhello()
+```
+用`hello`替换掉`self`，返回的结果和原来一样。
 
 ##代码风格
 

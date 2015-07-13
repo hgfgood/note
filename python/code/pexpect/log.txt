@@ -1,0 +1,17 @@
+sshd_config                                     0%    0     0.0KB/s   --:-- ETAsshd_config                                   100% 4359     4.3KB/s   00:00    
+id_rsa.pub                                      0%    0     0.0KB/s   --:-- ETAid_rsa.pub                                    100%  408     0.4KB/s   00:00    
+authorized_keys                                 0%    0     0.0KB/s   --:-- ETAauthorized_keys                               100%  799     0.8KB/s   00:00    
+Last login: Tue Jul  7 17:02:50 2015 from 192.168.122.1
+[root@localhost ~]# sudo mv /root/sshd_config /etc/ssh/sshd_config
+sudo mv /root/sshd_config /etc/ssh/sshd_config
+[root@localhost ~]# chmod 700 /root/.ssh
+chmod 700 /root/.ssh
+[root@localhost ~]# chmod 600 /root/.ssh/authorized_keys
+chmod 600 /root/.ssh/authorized_keys
+[root@localhost ~]# a  autopasswd.py  cluster_autopassword.py  log.txt  sshd_config  sshlog.txt
+mv /home/hgf/authorized_keys /home/hgf/.ssh/authorized_keys
+mv /home/hgf/authorized_keys /home/hgf/.ssh/authorized_keys
+chmod 600 /home/hgf/.ssh/authorized_keys
+chmod 600 /home/hgf/.ssh/authorized_keys
+chmod 700 /home/hgf/.ssh
+chmod 700 /home/hgf/.ssh
