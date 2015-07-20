@@ -7,11 +7,11 @@ __author__ = 'hgf'
 
 app_path = raw_input("hgfserver app path [default path is:'/usr/local/hgfserver']:")
 if len(app_path) == 0:
-    app_path = 'hgfserver'
-    os.mkdir(app_path)
-    os.mkdir(app_path+"/conf")
-    os.mkdir(app_path+"/logs")
-    os.mkdir(app_path+"/key")
+    app_path = '/home/hgf/Documents/python/code/webservice/hgfserver'
+    # os.mkdir(app_path)
+    # os.mkdir(app_path+"/conf")
+    # os.mkdir(app_path+"/logs")
+    # os.mkdir(app_path+"/key")
 
 conf_ini = app_path + "/conf/hgfserver.conf"
 config = configobj.ConfigObj(conf_ini, encoding='UTF-8')
@@ -42,7 +42,7 @@ config['ssl']['certificate'] = app_path + "/key/server.crt"
 
 config['cgim'] = {}
 config['cgim']['cgi_moudle'] = "on"
-config['cgim']['cgi_path'] = "/cgi-bin"
+config['cgim']['cgi_path'] = app_path + "/cgi-bin"
 config['cgim']['cgi_extensions'] = "('.cgi', '.py', '.pl', '.php' )"
 
 config['contentTypes'] = {}
