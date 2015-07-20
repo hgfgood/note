@@ -2,12 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88dd4d48-8d1b-4cca-a6ce-ae7695fc03d6" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webservice/hgfserver/logs/access.log" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webservice/hgfserver/logs/error.log" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/webservice/hgfserver/cgi-bin/index.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webservice/HandleConfigfile.py" afterPath="$PROJECT_DIR$/webservice/HandleConfigfile.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webservice/hgfserver/src/hgfserver.py" afterPath="$PROJECT_DIR$/webservice/hgfserver/src/hgfserver.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../python自动化运维2.md" afterPath="$PROJECT_DIR$/../python自动化运维2.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="code.iws" />
@@ -602,7 +596,13 @@
       <option name="project" value="LOCAL" />
       <updated>1437359145475</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="添加：webserver&#10;自己动手写webservice">
+      <created>1437359275022</created>
+      <option name="number" value="00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1437359275022</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1044,6 +1044,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0703125">
           <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1061,6 +1062,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
