@@ -1,0 +1,12 @@
+#password
+MYSQL_PASSWORD=hgfgood
+ADMIN_PASSWORD=hgfgood
+SERVICE_PASSWORD=hgfgood
+RABBIT_PASSWORD=hgfgood
+SERVICE_TOKEN=hgfgood
+
+#enable service ceilometer
+enable_service ceilometer-acompute
+enable_service ceilometer-acentral
+enable_service ceilometer-collector
+enable_service ceilometer-api
