@@ -6,7 +6,7 @@
 
 参考百度经验，[安装centos和windows8.1双系统](http://jingyan.baidu.com/article/1709ad80b28cf74634c4f0d5.html)
 
-###秀姑引导windows8
+###引导windows8
 
 主要参考：[csdn博客](http://blog.csdn.net/johnnyhu90/article/details/41410547)
 
@@ -37,3 +37,22 @@ enabled=1
 
 3.  使用安装命令安装shadowsocks-qt5：`sudo yum install shadowsocks-qt5`
 4.  安装完成后，将2中的文件的最后一行`enable`设置为`0`
+
+##安装chrome
+[参考网站](http://www.tecmint.com/install-google-chrome-on-redhat-centos-fedora-linux/)[http://www.tecmint.com/install-google-chrome-on-redhat-centos-fedora-linux/](http://www.tecmint.com/install-google-chrome-on-redhat-centos-fedora-linux/)
+
+1.  在文件`/etc/yum.repos.d/google-chrome.repo`中添加：
+```
+[google-chrome]
+name=google-chrome
+baseurl=http://dl.google.com/linux/chrome/rpm/stable/$basearch
+enabled=1
+gpgcheck=1
+gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
+
+```
+2.  检查是否有了chrome
+`yum info google-chrome-stable`
+
+3.  安装chrome
+`yum install google-chrome-stable`
