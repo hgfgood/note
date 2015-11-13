@@ -1,10 +1,1 @@
-{
-	"server":"2604:a880:1:20::28b:e001",
-	"server_port":8387,
-	"local_address":"127.0.0.1",
-	"local_port":1080,
-	"password":"admin",
-	"timeout":300,
-	"method":"aes-256-cfb",
-	"fast_open":false
-}
+
